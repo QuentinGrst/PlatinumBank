@@ -6,7 +6,8 @@ import { Card } from '../cards/card.entity';
 import { Account } from '../accounts/account.entity';
 import { User } from '../users/user.entity';
 import { Operation } from '../operations/operation.entity';
-import { Transfer } from '../transfers/transfer.entity'; // Import de l'entité Transfer
+import { Dab } from './dab.entity';
+import { Transfer } from '../transfers/transfer.entity';
 import { CardService } from '../cards/card.service';
 import { AccountService } from '../accounts/account.service';
 import { OperationService } from '../operations/operation.service';
@@ -15,7 +16,7 @@ import { UsersModule } from '../users/users.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Card, Account, User, Operation, Transfer]),
+    TypeOrmModule.forFeature([Card, Account, User, Operation, Dab, Transfer]),
     UsersModule,
   ],
   providers: [
