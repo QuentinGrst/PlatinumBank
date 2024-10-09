@@ -6,10 +6,12 @@ import { Card } from './cards/card.entity';
 import { Transaction } from './transactions/transaction.entity';
 import { UsersModule } from './users/users.module';
 import { AccountsModule } from './accounts/accounts.module';
-import { CardsModule } from './cards/cards.module';
-import { TransactionsModule } from './transactions/transactions.module';
+import { CardModule } from './cards/card.module';
 import { DabModule } from './dab/dab.module';
 import { AuthModule } from './auth/auth.module';
+import { Operation } from './operations/operation.entity';
+import { Dab } from './dab/dab.entity';
+import { Transfer } from './transfers/transfer.entity';
 
 @Module({
   imports: [
@@ -20,13 +22,12 @@ import { AuthModule } from './auth/auth.module';
       username: 'platinium_bank',
       password: 'root',
       database: 'platinium_bank',
-      entities: [User, Account, Card, Transaction],
+      entities: [User, Account, Card, Operation, Dab, Transfer],
       synchronize: true,
     }),
     UsersModule,
     AccountsModule,
-    CardsModule,
-    TransactionsModule,
+    CardModule,
     DabModule,
     AuthModule,
   ],
