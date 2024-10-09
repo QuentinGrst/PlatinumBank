@@ -39,6 +39,9 @@ export class Card {
   @ManyToOne(() => User)
   user: User;
 
+  @Column({ type: 'decimal', default: 500.0, precision: 10, scale: 2 })
+  withdrawalLimit: number;
+
   @BeforeInsert()
   async generateCardNumber() {
     this.cardNumber = '5131' + Math.random().toString().slice(2, 14);
