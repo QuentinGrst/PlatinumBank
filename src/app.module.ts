@@ -17,7 +17,7 @@ import { DabModule } from './dab/dab.module';
       host: 'localhost',
       port: 3306,
       username: 'root',
-      password: 'password',
+      password: '',
       database: 'platinium_bank',
       entities: [User, Account, Card, Transaction],
       synchronize: true,
