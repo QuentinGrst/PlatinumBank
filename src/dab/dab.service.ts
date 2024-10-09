@@ -4,8 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccountService } from 'src/accounts/account.service';
 import { Account } from 'src/accounts/account.entity';
-import { UsersService } from 'src/users/users.service';
-import { CardService } from 'src/cards/card.service';
 
 @Injectable()
 export class DabService {
@@ -13,7 +11,6 @@ export class DabService {
     @InjectRepository(Dab)
     private dabRepository: Repository<Dab>,
     private accountService: AccountService,
-    private cardService: CardService,
   ) {}
 
   async connectUser(cardNumber: string, pin: number): any {
@@ -25,6 +22,9 @@ export class DabService {
     return await this.dabRepository.findOne({ where: { id: id } });
   }
 
+  async getUserAccounts(userId: number): Promise<Account[]> {
+    return this.accountService.findAccountByUserID(userId);
+  }
   async getUserAccounts(userId: number): Promise<Account[]> {
     return this.accountService.findAccountByUserID(userId);
   }
