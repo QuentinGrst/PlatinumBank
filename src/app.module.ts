@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { Operation } from './operations/operation.entity';
 import { Dab } from './dab/dab.entity';
 import { Transfer } from './transfers/transfer.entity';
+import { OperationModule } from './operations/operation.module';
+import { TransferModule } from './transfers/transfer.module';
 
 @Module({
   imports: [
@@ -29,6 +31,8 @@ import { Transfer } from './transfers/transfer.entity';
     CardModule,
     DabModule,
     AuthModule,
+    OperationModule,
+    TransferModule
   ],
 })
 export class AppModule {}
