@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from './account.entity';
@@ -31,24 +35,33 @@ export class AccountService {
 
     // Vérifier que le nombre d'utilisateurs correspond au type de compte
     if (accountType !== AccountType.COMMUN && userIds.length !== 1) {
-      throw new BadRequestException('Les comptes de type non COMMUN doivent avoir un seul utilisateur.');
+      throw new BadRequestException(
+        'Les comptes de type non COMMUN doivent avoir un seul utilisateur.',
+      );
     }
 
     if (accountType === AccountType.COMMUN && userIds.length !== 2) {
-      throw new BadRequestException('Le compte de type COMMUN doit avoir exactement deux utilisateurs.');
+      throw new BadRequestException(
+        'Le compte de type COMMUN doit avoir exactement deux utilisateurs.',
+      );
     }
 
     // Récupérer les utilisateurs à partir de leurs identifiants
     const users = await this.usersRepository.findByIds(userIds);
 
     if (users.length !== userIds.length) {
-      throw new BadRequestException('Un ou plusieurs utilisateurs sont introuvables.');
+      throw new BadRequestException(
+        'Un ou plusieurs utilisateurs sont introuvables.',
+      );
     }
 
     // Vérifier que les utilisateurs n'ont pas déjà un compte de ce type
     for (const user of users) {
       const existingAccount = await this.accountsRepository.findOne({
-        where: { users: { id: user.id }, accountType: accountType as AccountType },
+        where: {
+          users: { id: user.id },
+          accountType: accountType as AccountType,
+        },
       });
       if (existingAccount) {
         throw new BadRequestException(
@@ -81,7 +94,10 @@ export class AccountService {
 
   // Récupérer un compte par ID
   async findAccountById(id: number): Promise<Account> {
-    const account = await this.accountsRepository.findOne({ where: { id }, relations: ['users', 'cards'] });
+    const account = await this.accountsRepository.findOne({
+      where: { id },
+      relations: ['users', 'cards'],
+    });
     if (!account) {
       throw new NotFoundException('Compte introuvable.');
     }
@@ -111,7 +127,10 @@ export class AccountService {
 
   // Supprimer un compte
   async removeAccount(id: number): Promise<void> {
-    const account = await this.accountsRepository.findOne({ where: { id }, relations: ['cards', 'users'] });
+    const account = await this.accountsRepository.findOne({
+      where: { id },
+      relations: ['cards', 'users'],
+    });
     if (!account) {
       throw new NotFoundException('Compte introuvable.');
     }

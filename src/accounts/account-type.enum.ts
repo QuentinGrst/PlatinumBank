@@ -1,6 +1,6 @@
 export enum AccountType {
-  COURANT = 'Courant',
-  PRO = 'Pro',
-  LIVRET_A = 'Livret A',
-  COMMUN = 'Commun',
+  COURANT = 'courant',
+  PRO = 'pro',
+  LIVRET_A = 'livret_a',
+  COMMUN = 'commun',
 }
