@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { Account } from '../accounts/account.entity';
 import { User } from '../users/user.entity';
 import { IsNumberString, Length } from 'class-validator';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class Card {
@@ -32,4 +33,12 @@ export class Card {
 
   @Column({ default: false })
   isBlocked: boolean;
+
+  @BeforeInsert()
+  @BeforeUpdate()
+  async hashPinCode() {
+    if (this.pinCode) {
+      this.pinCode = await bcrypt.hash(this.pinCode, 10);
+    }
+  }
 }
