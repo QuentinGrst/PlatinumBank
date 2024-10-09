@@ -10,6 +10,13 @@ import { Card } from '../cards/card.entity';
 import { Transaction } from '../transactions/transaction.entity';
 import { AccountType } from './account-type.enum';
 
+export enum AccountType {
+  COURANT = 'courant',
+  PRO = 'pro',
+  LIVRET_A = 'livret_a',
+  COMMUN = 'commun',
+}
+
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
@@ -21,7 +28,7 @@ export class Account {
   @Column({ type: 'float' })
   balance: number;
 
-  @ManyToOne(() => User, (user) => user.accounts)
+  @ManyToOne(() => User)
   user: User;
 
   @OneToMany(() => Card, (card) => card.account)
