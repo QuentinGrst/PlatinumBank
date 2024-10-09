@@ -33,6 +33,12 @@ export class Account {
   @JoinTable({ name: 'account_users' }) // Table de jonction pour relier utilisateurs et comptes
   users: User[];
 
+  @ManyToOne(() => User, (user) => user.secondaryAccounts, {
+    eager: true,
+    nullable: true,
+  })
+  secondHolder: User;
+
   @OneToMany(() => Card, (card) => card.account, { cascade: true })
   cards: Card[];
 }

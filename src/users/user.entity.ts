@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 import { Account } from '../accounts/account.entity';
+import { Card } from '../cards/card.entity';
 
 @Entity()
 export class User {
