@@ -21,6 +21,15 @@ export class OperationController {
     return this.operationService.findOperationById(id);
   }
 
+  // fonctionne partiellement
+  @Post('cheque')
+  async depositCheque(
+    @Body('cardId') cardId: number,
+    @Body('amount') amount: number,
+  ): Promise<string> {
+    return this.operationService.depositCheque(cardId, amount);
+  }
+
   @Put(':id')
   async updateOperation(
     @Param('id', ParseIntPipe) id: number,

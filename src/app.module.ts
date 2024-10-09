@@ -13,9 +13,11 @@ import { Dab } from './dab/dab.entity';
 import { Transfer } from './transfers/transfer.entity';
 import { OperationModule } from './operations/operation.module';
 import { TransferModule } from './transfers/transfer.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
