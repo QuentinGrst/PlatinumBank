@@ -3,14 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
 import { Account } from './accounts/account.entity';
 import { Card } from './cards/card.entity';
-import { Transaction } from './transactions/transaction.entity';
 import { UsersModule } from './users/users.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { CardModule } from './cards/card.module';
 import { DabModule } from './dab/dab.module';
 import { AuthModule } from './auth/auth.module';
 import { Operation } from './operations/operation.entity';
-import { Dab } from './dab/dab.entity';
 import { Transfer } from './transfers/transfer.entity';
 
 @Module({

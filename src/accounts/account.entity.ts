@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Card } from '../cards/card.entity';
-import { Transaction } from '../transactions/transaction.entity';
 import { AccountType } from './account-type.enum';
 
 @Entity()

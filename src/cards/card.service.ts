@@ -94,6 +94,13 @@ export class CardService {
     });
   }
 
+  async findByCardNumber(cardNumber: string): Promise<Card> {
+    return this.cardRepository.findOne({
+      where: { cardNumber: cardNumber },
+      relations: ['account'],
+    });
+  }
+
   async deleteCard(id: number): Promise<void> {
     const result = await this.cardRepository.delete(id);
 

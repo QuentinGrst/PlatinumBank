@@ -10,4 +10,9 @@ export class DabController {
   async findBy(@Param('id') id: number): Promise<Dab> {
     return await this.dabService.findById(id);
   }
+
+  @Get()
+  async connectUser(): Promise<Dab[]> {
+    return await this.dabService.connectUser('', 1234);
+  }
 }
