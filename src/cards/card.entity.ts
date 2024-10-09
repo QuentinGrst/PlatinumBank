@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  BeforeInsert,
+} from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { Account } from '../accounts/account.entity';
 
 @Entity()
@@ -12,15 +19,17 @@ export class Card {
   @Column()
   pinCode: string;
 
-  @Column()
-  cardHolderName: string;
-
   @ManyToOne(() => Account, (account) => account.cards)
   account: Account;
 
-  @Column({ default: 0 })
-  dailyWithdrawalLimit: number;
+  @BeforeInsert()
+  async generateCardNumber() {
+    this.cardNumber = '5131' + Math.random().toString().slice(2, 14);
+  }
 
-  @Column({ default: false })
-  isBlocked: boolean;
+  @BeforeInsert()
+  async hashPinCode() {
+    const salt = await bcrypt.genSalt();
+    this.pinCode = await bcrypt.hash(this.pinCode, salt);
+  }
 }

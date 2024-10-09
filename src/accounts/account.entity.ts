@@ -8,14 +8,15 @@ import {
 import { User } from '../users/user.entity';
 import { Card } from '../cards/card.entity';
 import { Transaction } from '../transactions/transaction.entity';
+import { AccountType } from './account-type.enum';
 
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  accountType: string;
+  @Column({ type: 'enum', enum: AccountType })
+  accountType: AccountType;
 
   @Column({ type: 'float' })
   balance: number;
