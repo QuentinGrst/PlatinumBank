@@ -27,6 +27,7 @@ export class AccountService {
     accountType: string,
     pinCode?: string,
   ): Promise<Account> {
+    // Vérifier que le type de compte est valide
     if (!Object.values(AccountType).includes(accountType as AccountType)) {
       throw new BadRequestException(
         `Le type de compte doit être l'une des valeurs suivantes : ${Object.values(AccountType).join(', ')}`,

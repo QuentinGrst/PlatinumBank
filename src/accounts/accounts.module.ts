@@ -6,13 +6,13 @@ import { AccountController } from './account.controller';
 import { User } from '../users/user.entity'; // Importer User
 import { UsersModule } from '../users/users.module'; // Importer UsersModule
 import { Card } from '../cards/card.entity';
-import { CardModule } from '../cards/card.module';
+import { CardsModule } from '../cards/cards.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Account, User, Card]), // Inclure Account, User, Card ici
     UsersModule, // Importer UsersModule pour rendre UserRepository disponible
-    CardModule,
+    CardsModule,
   ],
   providers: [AccountService],
   controllers: [AccountController],
