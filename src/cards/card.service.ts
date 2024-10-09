@@ -2,7 +2,8 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Card } from './card.entity';
-import { Account, AccountType } from '../accounts/account.entity';
+import { Account } from '../accounts/account.entity';
+import { AccountType } from 'src/accounts/account-type.enum';
 
 @Injectable()
 export class CardService {
@@ -22,29 +23,41 @@ export class CardService {
 
     if (!account) {
       throw new BadRequestException("Le compte n'a pas été trouvé");
-    } 
+    }
 
     if (account.accountType === AccountType.LIVRET_A) {
-      throw new BadRequestException('La carte ne peut pas être associée à ce type de compte');
-    } 
+      throw new BadRequestException(
+        'La carte ne peut pas être associée à ce type de compte',
+      );
+    }
 
-    if  (card.user.id !== account.user.id) {
-      throw new BadRequestException('La carte doit appartenir au même utilisateur que le compte');
-    } 
+    if (card.user.id !== account.user.id) {
+      throw new BadRequestException(
+        'La carte doit appartenir au même utilisateur que le compte',
+      );
+    }
 
-    if ((account.accountType !== AccountType.COMMUN && account.cards.length >= 1) || (account.accountType === AccountType.COMMUN && account.cards.length >= 2)) {
-      throw new BadRequestException('Le nombre max de cartes a été atteint pour ce compte');
+    if (
+      (account.accountType !== AccountType.COMMUN &&
+        account.cards.length >= 1) ||
+      (account.accountType === AccountType.COMMUN && account.cards.length >= 2)
+    ) {
+      throw new BadRequestException(
+        'Le nombre max de cartes a été atteint pour ce compte',
+      );
     }
 
     if (account.accountType === AccountType.COMMUN) {
-      const cardOwners = account.cards.map(card => card.user.id);
-    
+      const cardOwners = account.cards.map((card) => card.user.id);
+
       const userAlreadyHasCard = cardOwners.includes(card.user.id);
       if (userAlreadyHasCard) {
-        throw new BadRequestException("Une carte max par utilisateur par compte");
+        throw new BadRequestException(
+          'Une carte max par utilisateur par compte',
+        );
       }
     }
-    
+
     const newCard = this.cardRepository.create(card);
     return this.cardRepository.save(newCard);
   }
