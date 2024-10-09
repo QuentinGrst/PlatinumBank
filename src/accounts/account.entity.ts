@@ -9,13 +9,24 @@ import { User } from '../users/user.entity';
 import { Card } from '../cards/card.entity';
 import { Transaction } from '../transactions/transaction.entity';
 
+export enum AccountType {
+  COURANT = 'courant',
+  PRO = 'pro',
+  LIVRET_A = 'livret_a',
+  COMMUN = 'commun',
+}
+
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  accountType: string;
+  @Column({
+    type: 'enum',
+    enum: AccountType,
+    default: AccountType.COURANT,
+  })
+  accountType: AccountType;
 
   @Column({ type: 'float' })
   balance: number;
