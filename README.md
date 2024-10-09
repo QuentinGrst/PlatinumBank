@@ -5,6 +5,8 @@ Groupe 2 : Gabin - Quentin - Lucas
 ## Prérequis :
 
 Avoir une instance de MySql qui tourne (port 3306 de préférence)
+Avoir une base de données platinium_bank vide
+Un user root avec mot de passe vide pour le SQL (sinon, vous modifiez la configuration de la base de données)
 
 ## Clône du projet :
 
