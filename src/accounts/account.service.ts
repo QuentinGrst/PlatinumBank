@@ -83,6 +83,17 @@ export class AccountService {
     return account;
   }
 
+  // Récupérer un compte par id de user
+  async findAccountByUserID(id: number): Promise<Account[]> {
+    const account = await this.accountsRepository.find({
+      where: { user: { id: id } },
+    });
+    if (!account) {
+      throw new NotFoundException('Compte introuvable.');
+    }
+    return account;
+  }
+
   // Mettre à jour le solde d'un compte
   async updateAccount(id: number, balance: number): Promise<void> {
     const account = await this.accountsRepository.findOne({ where: { id } });
