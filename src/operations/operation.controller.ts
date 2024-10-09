@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { OperationService } from './operation.service';
 import { Operation } from './operation.entity';
 
@@ -7,7 +16,9 @@ export class OperationController {
   constructor(private readonly operationService: OperationService) {}
 
   @Post()
-  async createOperation(@Body() operationData: Partial<Operation>): Promise<Operation> {
+  async createOperation(
+    @Body() operationData: Partial<Operation>,
+  ): Promise<Operation> {
     return this.operationService.createOperation(operationData);
   }
 
@@ -17,7 +28,9 @@ export class OperationController {
   }
 
   @Get(':id')
-  async findOperationById(@Param('id', ParseIntPipe) id: number): Promise<Operation> {
+  async findOperationById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Operation> {
     return this.operationService.findOperationById(id);
   }
 

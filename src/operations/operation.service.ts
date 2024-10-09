@@ -1,4 +1,8 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, MoreThanOrEqual } from 'typeorm';
 import { Operation } from './operation.entity';
@@ -45,7 +49,10 @@ export class OperationService {
     return operation;
   }
 
-  async updateOperation(id: number, operationData: Partial<Operation>): Promise<Operation> {
+  async updateOperation(
+    id: number,
+    operationData: Partial<Operation>,
+  ): Promise<Operation> {
     this.validateOperationData(operationData);
 
     if (operationData.isWithdrawal) {
@@ -68,7 +75,9 @@ export class OperationService {
     const { amount, transfer } = operationData;
 
     if (amount !== undefined && transfer !== undefined) {
-      throw new BadRequestException('Une opération ne peut pas avoir à la fois un `amount` et un `transfer`.');
+      throw new BadRequestException(
+        'Une opération ne peut pas avoir à la fois un `amount` et un `transfer`.',
+      );
     }
 
     if (amount !== undefined) {

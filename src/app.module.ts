@@ -22,8 +22,8 @@ import { ScheduleModule } from '@nestjs/schedule';
       type: 'mysql',
       host: 'localhost',
       port: 3306,
-      username: 'root',
-      password: '',
+      username: 'platinium_bank',
+      password: 'root',
       database: 'platinium_bank',
       entities: [User, Account, Card, Operation, Dab, Transfer],
       synchronize: true,
@@ -34,7 +34,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     DabModule,
     AuthModule,
     OperationModule,
-    TransferModule
+    TransferModule,
   ],
 })
 export class AppModule {}
