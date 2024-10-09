@@ -27,17 +27,20 @@ export class AccountService {
     accountType: string,
     pinCode: string,
   ): Promise<Account> {
+    // Vérifier que le type de compte est valide
     if (!Object.values(AccountType).includes(accountType as AccountType)) {
       throw new BadRequestException(
         `Le type de compte doit être l'une des valeurs suivantes : ${Object.values(AccountType).join(', ')}`,
       );
     }
 
+    // Vérifier que l'utilisateur existe
     const user = await this.usersRepository.findOneBy({ id: userId });
     if (!user) {
       throw new BadRequestException('Utilisateur introuvable.');
     }
 
+    // Vérifier que l'utilisateur ne possède pas déjà un compte de ce type
     const existingAccount = await this.accountsRepository.findOne({
       where: { user: { id: userId }, accountType: accountType as AccountType },
     });
@@ -47,23 +50,27 @@ export class AccountService {
       );
     }
 
+    // Vérifier que le code PIN est renseigné
+    if (!pinCode) {
+      throw new BadRequestException('Le code PIN est obligatoire.');
+    }
+
+    // Créer et enregistrer le compte
     const account = this.accountsRepository.create({
       user,
       accountType: accountType as AccountType,
       balance: 0,
     });
 
-    if (pinCode) {
-      const card = this.cardsRepository.create({
-        pinCode,
-        account, // Associer la carte au compte
-        user, // Associer la carte à l'utilisateur
-      });
+    // Créer et associer la carte au compte
+    const card = this.cardsRepository.create({
+      pinCode,
+    });
 
-      await this.cardsRepository.save(card);
-      account.cards = [card]; // Associer la carte au compte après sa sauvegarde
-    }
+    account.cards = [card];
 
+    // Enregistrer la carte et le compte dans la base de données
+    await this.cardsRepository.save(card);
     return this.accountsRepository.save(account);
   }
 
