@@ -4,6 +4,8 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Card } from '../cards/card.entity';
@@ -20,11 +22,9 @@ export class Account {
   @Column({ type: 'float' })
   balance: number;
 
-  @ManyToOne(() => User, (user) => user.accounts, { eager: true })
-  user: User;
-
-  @ManyToOne(() => User, (user) => user.secondaryAccounts, { eager: true, nullable: true })
-  secondHolder: User;
+  @ManyToMany(() => User, (user) => user.accounts, { cascade: true })
+  @JoinTable({ name: 'account_users' }) // Table de jonction pour relier utilisateurs et comptes
+  users: User[];
 
   @OneToMany(() => Card, (card) => card.account, { cascade: true })
   cards: Card[];

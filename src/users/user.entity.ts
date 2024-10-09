@@ -1,6 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToMany } from 'typeorm';
 import { Account } from '../accounts/account.entity';
-import { Card } from '../cards/card.entity';
 
 @Entity()
 export class User {
@@ -16,12 +15,6 @@ export class User {
   @Column()
   password: string;
 
-  @OneToMany(() => Account, (account) => account.user)
+  @ManyToMany(() => Account, (account) => account.users)
   accounts: Account[];
-
-  @OneToMany(() => Card, (card) => card.user)
-  cards: Card[];
-
-  @OneToMany(() => Account, (account) => account.secondHolder)
-  secondaryAccounts: Account[];
 }
