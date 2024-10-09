@@ -27,7 +27,10 @@ export class TransferService {
     return transfer;
   }
 
-  async updateTransfer(id: number, transferData: Partial<Transfer>): Promise<Transfer> {
+  async updateTransfer(
+    id: number,
+    transferData: Partial<Transfer>,
+  ): Promise<Transfer> {
     const transfer = await this.findTransferById(id);
     Object.assign(transfer, transferData);
     return this.transferRepository.save(transfer);

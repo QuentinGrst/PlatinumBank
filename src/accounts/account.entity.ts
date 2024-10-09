@@ -2,7 +2,6 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  ManyToOne,
   OneToMany,
   ManyToMany,
   JoinTable,
@@ -23,7 +22,7 @@ export class Account {
   balance: number;
 
   @ManyToMany(() => User, (user) => user.accounts, { cascade: true })
-  @JoinTable({ name: 'account_users' }) // Table de jonction pour relier utilisateurs et comptes
+  @JoinTable({ name: 'account_users' })
   users: User[];
 
   @OneToMany(() => Card, (card) => card.account, { cascade: true })
