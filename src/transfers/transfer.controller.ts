@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { TransferService } from './transfer.service';
 import { Transfer } from './transfer.entity';
 
@@ -7,7 +16,9 @@ export class TransferController {
   constructor(private readonly transferService: TransferService) {}
 
   @Post()
-  async createTransfer(@Body() transferData: Partial<Transfer>): Promise<Transfer> {
+  async createTransfer(
+    @Body() transferData: Partial<Transfer>,
+  ): Promise<Transfer> {
     return this.transferService.createTransfer(transferData);
   }
 
@@ -17,7 +28,9 @@ export class TransferController {
   }
 
   @Get(':id')
-  async findTransferById(@Param('id', ParseIntPipe) id: number): Promise<Transfer> {
+  async findTransferById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Transfer> {
     return this.transferService.findTransferById(id);
   }
 

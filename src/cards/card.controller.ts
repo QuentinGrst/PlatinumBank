@@ -25,7 +25,9 @@ export class CardController {
   async getCardById(@Param('id', ParseIntPipe) id: number): Promise<Card> {
     const card = await this.cardService.findById(id);
     if (!card) {
-      throw new NotFoundException(`La carte avec l'ID ${id} n'a pas été trouvée.`);
+      throw new NotFoundException(
+        `La carte avec l'ID ${id} n'a pas été trouvée.`,
+      );
     }
     return card;
   }
