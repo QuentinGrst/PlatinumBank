@@ -16,48 +16,54 @@ export class CardService {
   ) {}
 
   private async checkCard(card: Partial<Card>): Promise<void> {
-    console.log(card.account.id);
-
+    // Récupérer le compte associé avec les utilisateurs et les cartes
     const account = await this.accountRepository.findOne({
       where: { id: card.account.id },
-      relations: ['cards'],
+      relations: ['users', 'cards'], // Charger les utilisateurs associés au compte
     });
 
-    console.log('coucou');
-
     if (!account) {
-      throw new BadRequestException("Le compte n'a pas été trouvé");
+      throw new BadRequestException("Le compte n'a pas été trouvé.");
     }
 
+    // Vérifier le type de compte
     if (account.accountType === AccountType.LIVRET_A) {
       throw new BadRequestException(
-        'La carte ne peut pas être associée à ce type de compte',
+        'La carte ne peut pas être associée à ce type de compte.',
       );
     }
-    console.log(account);
 
-    if (card.user.id !== account.user.id) {
+    // Vérifier que l'utilisateur de la carte est bien associé au compte
+    const isUserAssociated = account.users.some(
+      (user) => user.id === card.user.id,
+    );
+    if (!isUserAssociated) {
       throw new BadRequestException(
-        'La carte doit appartenir au même utilisateur que le compte',
+        'La carte doit appartenir à un utilisateur associé au compte.',
       );
     }
 
+    // Vérifier le nombre maximum de cartes
     const maxCards = account.accountType === AccountType.COMMUN ? 2 : 1;
-
     if (account.cards.length >= maxCards) {
       throw new BadRequestException(
-        'Le nombre max de cartes a été atteint pour ce compte',
+        'Le nombre max de cartes a été atteint pour ce compte.',
       );
     }
 
-    // if (account.accountType === AccountType.COMMUN) {
-    //   const cardOwners = account.cards.map((existingCard) => existingCard.user.id);
-    //   const userAlreadyHasCard = cardOwners.includes(card.user.id);
+    // Vérifier qu'un utilisateur ne possède qu'une seule carte dans le compte COMMUN
+    if (account.accountType === AccountType.COMMUN) {
+      const cardOwners = account.cards.map(
+        (existingCard) => existingCard.user.id,
+      );
+      const userAlreadyHasCard = cardOwners.includes(card.user.id);
 
-    //   if (userAlreadyHasCard) {
-    //     throw new BadRequestException('Chaque utilisateur ne peut avoir qu’une seule carte pour ce compte commun');
-    //   }
-    // }
+      if (userAlreadyHasCard) {
+        throw new BadRequestException(
+          'Chaque utilisateur ne peut avoir qu’une seule carte pour ce compte commun.',
+        );
+      }
+    }
   }
 
   async createCard(card: Partial<Card>): Promise<Card> {

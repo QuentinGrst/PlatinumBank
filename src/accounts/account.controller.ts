@@ -8,19 +8,22 @@ import {
   Put,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
+import { Account } from './account.entity';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
-  // Route pour créer un nouveau compte avec l'URL /account/create
-  @Post('create')
+  @Post()
   async createAccount(
     @Body('userId') userId: number,
+    @Body('secondUserId') secondUserId: number,
     @Body('accountType') accountType: string,
     @Body('pinCode') pinCode: string,
-  ) {
-    return this.accountService.createAccount(userId, accountType, pinCode);
+  ): Promise<Account> {
+    const userIds: number[] = secondUserId ? [userId, secondUserId] : [userId];
+
+    return this.accountService.createAccount(userIds, accountType, pinCode);
   }
 
   // Route pour récupérer un compte par ID

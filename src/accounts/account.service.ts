@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Account } from './account.entity';
@@ -21,11 +17,11 @@ export class AccountService {
     private cardsRepository: Repository<Card>,
   ) {}
 
-  // Créer un compte avec une carte
+  // Créer un compte avec des utilisateurs associés
   async createAccount(
-    userId: number,
+    userIds: number[], // Un tableau d'identifiants d'utilisateurs
     accountType: string,
-    pinCode: string,
+    pinCode?: string,
   ): Promise<Account> {
     if (!Object.values(AccountType).includes(accountType as AccountType)) {
       throw new BadRequestException(
@@ -33,35 +29,51 @@ export class AccountService {
       );
     }
 
-    const user = await this.usersRepository.findOneBy({ id: userId });
-    if (!user) {
-      throw new BadRequestException('Utilisateur introuvable.');
+    // Vérifier que le nombre d'utilisateurs correspond au type de compte
+    if (accountType !== AccountType.COMMUN && userIds.length !== 1) {
+      throw new BadRequestException('Les comptes de type non COMMUN doivent avoir un seul utilisateur.');
     }
 
-    const existingAccount = await this.accountsRepository.findOne({
-      where: { user: { id: userId }, accountType: accountType as AccountType },
-    });
-    if (existingAccount) {
-      throw new BadRequestException(
-        `L'utilisateur possède déjà un compte de type ${accountType}.`,
-      );
+    if (accountType === AccountType.COMMUN && userIds.length !== 2) {
+      throw new BadRequestException('Le compte de type COMMUN doit avoir exactement deux utilisateurs.');
     }
 
+    // Récupérer les utilisateurs à partir de leurs identifiants
+    const users = await this.usersRepository.findByIds(userIds);
+
+    if (users.length !== userIds.length) {
+      throw new BadRequestException('Un ou plusieurs utilisateurs sont introuvables.');
+    }
+
+    // Vérifier que les utilisateurs n'ont pas déjà un compte de ce type
+    for (const user of users) {
+      const existingAccount = await this.accountsRepository.findOne({
+        where: { users: { id: user.id }, accountType: accountType as AccountType },
+      });
+      if (existingAccount) {
+        throw new BadRequestException(
+          `L'utilisateur ${user.name} possède déjà un compte de type ${accountType}.`,
+        );
+      }
+    }
+
+    // Créer et enregistrer le compte avec les utilisateurs associés
     const account = this.accountsRepository.create({
-      user,
       accountType: accountType as AccountType,
       balance: 0,
+      users, // Associer les utilisateurs au compte
     });
 
+    // Si un PIN est fourni, créer une carte associée
     if (pinCode) {
       const card = this.cardsRepository.create({
         pinCode,
-        account, // Associer la carte au compte
-        user, // Associer la carte à l'utilisateur
+        account,
+        user: users[0], // Associer la carte au premier utilisateur (par défaut)
       });
 
       await this.cardsRepository.save(card);
-      account.cards = [card]; // Associer la carte au compte après sa sauvegarde
+      account.cards = [card];
     }
 
     return this.accountsRepository.save(account);
@@ -69,7 +81,7 @@ export class AccountService {
 
   // Récupérer un compte par ID
   async findAccountById(id: number): Promise<Account> {
-    const account = await this.accountsRepository.findOne({ where: { id } });
+    const account = await this.accountsRepository.findOne({ where: { id }, relations: ['users', 'cards'] });
     if (!account) {
       throw new NotFoundException('Compte introuvable.');
     }
@@ -99,7 +111,7 @@ export class AccountService {
 
   // Supprimer un compte
   async removeAccount(id: number): Promise<void> {
-    const account = await this.accountsRepository.findOne({ where: { id } });
+    const account = await this.accountsRepository.findOne({ where: { id }, relations: ['cards', 'users'] });
     if (!account) {
       throw new NotFoundException('Compte introuvable.');
     }
