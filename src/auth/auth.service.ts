@@ -13,7 +13,7 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<any> {
     const user = await this.usersService.findByEmail(email);
     if (user && user.password === password) {
-      return user; // Assure-toi de gérer correctement les mots de passe (par ex: hashage)
+      return user;
     }
     return null;
   }
