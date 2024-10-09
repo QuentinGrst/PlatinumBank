@@ -1,3 +1,5 @@
+Groupe 2 : Gabin - Quentin - Lucas
+
 # Installation du projet
 
 ## Prérequis :
