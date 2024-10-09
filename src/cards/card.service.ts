@@ -36,6 +36,15 @@ export class CardService {
       throw new BadRequestException('Le nombre max de cartes a été atteint pour ce compte');
     }
 
+    if (account.accountType === AccountType.COMMUN) {
+      const cardOwners = account.cards.map(card => card.user.id);
+    
+      const userAlreadyHasCard = cardOwners.includes(card.user.id);
+      if (userAlreadyHasCard) {
+        throw new BadRequestException("Une carte max par utilisateur par compte");
+      }
+    }
+    
     const newCard = this.cardRepository.create(card);
     return this.cardRepository.save(newCard);
   }
