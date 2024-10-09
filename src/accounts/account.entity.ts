@@ -7,25 +7,15 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { Card } from '../cards/card.entity';
+import { Transaction } from '../transactions/transaction.entity';
 import { AccountType } from './account-type.enum';
-
-export enum AccountType {
-  COURANT = 'courant',
-  PRO = 'pro',
-  LIVRET_A = 'livret_a',
-  COMMUN = 'commun',
-}
 
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({
-    type: 'enum',
-    enum: AccountType,
-    default: AccountType.COURANT,
-  })
+  @Column({ type: 'enum', enum: AccountType })
   accountType: AccountType;
 
   @Column({ type: 'float' })
