@@ -15,7 +15,11 @@ export class Account {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'enum', enum: AccountType })
+  @Column({
+    type: 'enum',
+    enum: AccountType,
+    default: AccountType.COURANT,
+  })
   accountType: AccountType;
 
   @Column({ type: 'float' })
