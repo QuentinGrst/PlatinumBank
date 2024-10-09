@@ -9,7 +9,6 @@ import { CardModule } from './cards/card.module';
 import { DabModule } from './dab/dab.module';
 import { AuthModule } from './auth/auth.module';
 import { Operation } from './operations/operation.entity';
-import { Dab } from './dab/dab.entity';
 import { Transfer } from './transfers/transfer.entity';
 
 @Module({
