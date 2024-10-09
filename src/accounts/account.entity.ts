@@ -20,12 +20,12 @@ export class Account {
   @Column({ type: 'float' })
   balance: number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.accounts, { eager: true })
   user: User;
 
-  @OneToMany(() => Card, (card) => card.account)
-  cards: Card[];
-
-  @ManyToOne(() => User, { nullable: true })
+  @ManyToOne(() => User, (user) => user.secondaryAccounts, { eager: true, nullable: true })
   secondHolder: User;
+
+  @OneToMany(() => Card, (card) => card.account, { cascade: true })
+  cards: Card[];
 }
