@@ -31,7 +31,7 @@ export class Account {
   @Column({ type: 'float' })
   balance: number;
 
-  @ManyToOne(() => User, (user) => user.accounts)
+  @ManyToOne(() => User)
   user: User;
 
   @OneToMany(() => Card, (card) => card.account)
