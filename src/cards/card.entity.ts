@@ -9,7 +9,6 @@ import * as bcrypt from 'bcrypt';
 import { Account } from '../accounts/account.entity';
 import { User } from '../users/user.entity';
 import { IsNumberString, Length } from 'class-validator';
-import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class Card {
